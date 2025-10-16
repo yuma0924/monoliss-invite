@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonoLiss - 招待リンク</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #9CB9A8 0%, #B8D4C8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .status.loading {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .button {
+            display: inline-block;
+            background: #9CB9A8;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background: #8AA897;
+        }
+
+        .code-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 18px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .instructions {
+            font-size: 13px;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">📝</div>
+        <h1>MonoLiss 招待</h1>
+        <p class="subtitle">共有リストへの招待</p>
+
+        <div id="status" class="status loading">
+            アプリを起動しています...
+        </div>
+
+        <div id="codeBox" class="code-box" style="display: none;"></div>
+
+        <a id="manualButton" href="#" class="button" style="display: none;">
+            アプリを開く
+        </a>
+
+        <div id="instructions" class="instructions" style="display: none;">
+            <strong>アプリがインストールされていない場合：</strong>
+            <ol>
+                <li>App Store または Google Play で「MonoLiss」を検索</li>
+                <li>アプリをインストール</li>
+                <li>アプリを開いて、上記の招待コードを入力</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // URLからtokenパラメータを取得
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const code = urlParams.get('code');
+
+        // カスタムURLスキームを生成
+        const appUrl = token
+            ? `monoliss://invite?token=${token}`
+            : 'monoliss://';
+
+        const statusEl = document.getElementById('status');
+        const codeBoxEl = document.getElementById('codeBox');
+        const manualButtonEl = document.getElementById('manualButton');
+        const instructionsEl = document.getElementById('instructions');
+
+        // 招待コードがある場合は表示
+        if (code) {
+            codeBoxEl.textContent = code;
+            codeBoxEl.style.display = 'block';
+        }
+
+        // 自動リダイレクト
+        function attemptRedirect() {
+            try {
+                // 1秒後に自動的にアプリを開く
+                setTimeout(() => {
+                    window.location.href = appUrl;
+                }, 1000);
+
+                // 3秒後にステータスを更新
+                setTimeout(() => {
+                    statusEl.className = 'status success';
+                    statusEl.textContent = 'アプリが起動しない場合は、下のボタンを押してください';
+                    manualButtonEl.style.display = 'inline-block';
+                    manualButtonEl.href = appUrl;
+                    instructionsEl.style.display = 'block';
+                }, 3000);
+            } catch (error) {
+                statusEl.className = 'status error';
+                statusEl.textContent = 'アプリを開けませんでした';
+                manualButtonEl.style.display = 'inline-block';
+                manualButtonEl.href = appUrl;
+                instructionsEl.style.display = 'block';
+            }
+        }
+
+        // ページ読み込み時に実行
+        if (token) {
+            attemptRedirect();
+        } else {
+            statusEl.className = 'status error';
+            statusEl.textContent = '招待リンクが無効です';
+            instructionsEl.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

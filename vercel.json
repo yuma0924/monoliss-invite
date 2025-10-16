@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/invite",
+      "dest": "/public/invite.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/invite.html"
+    }
+  ]
+}
