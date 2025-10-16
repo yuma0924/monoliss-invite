@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/invite",
-      "destination": "/public/invite.html"
+      "destination": "/invite.html"
     },
     {
       "source": "/(.*)",
-      "destination": "/public/invite.html"
+      "destination": "/invite.html"
     }
   ]
 }
