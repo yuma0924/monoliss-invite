@@ -86,18 +86,6 @@
             background: #8AA897;
         }
 
-        .code-box {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-family: monospace;
-            font-size: 18px;
-            letter-spacing: 2px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
         .instructions {
             font-size: 13px;
             color: #7f8c8d;
@@ -125,8 +113,6 @@
             アプリを起動しています...
         </div>
 
-        <div id="codeBox" class="code-box" style="display: none;"></div>
-
         <a id="manualButton" href="#" class="button" style="display: none;">
             アプリを開く
         </a>
@@ -136,7 +122,8 @@
             <ol>
                 <li>App Store または Google Play で「MonoLiss」を検索</li>
                 <li>アプリをインストール</li>
-                <li>アプリを開いて、上記の招待コードを入力</li>
+                <li>アプリを開いてサインインする</li>
+                <li id="step4">この招待リンクを再度クリックしてアプリを起動</li>
             </ol>
         </div>
     </div>
@@ -145,7 +132,6 @@
         // URLからtokenパラメータを取得
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
-        const code = urlParams.get('code');
 
         // カスタムURLスキームを生成
         const appUrl = token
@@ -153,15 +139,8 @@
             : 'monoliss://';
 
         const statusEl = document.getElementById('status');
-        const codeBoxEl = document.getElementById('codeBox');
         const manualButtonEl = document.getElementById('manualButton');
         const instructionsEl = document.getElementById('instructions');
-
-        // 招待コードがある場合は表示
-        if (code) {
-            codeBoxEl.textContent = code;
-            codeBoxEl.style.display = 'block';
-        }
 
         // 自動リダイレクト
         function attemptRedirect() {
