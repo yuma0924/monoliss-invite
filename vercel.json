@@ -1,13 +1,12 @@
 {
-  "version": 2,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/invite",
-      "dest": "/public/invite.html"
+      "source": "/invite",
+      "destination": "/public/invite.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/public/invite.html"
+      "source": "/(.*)",
+      "destination": "/public/invite.html"
     }
   ]
 }
